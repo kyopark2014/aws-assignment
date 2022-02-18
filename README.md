@@ -22,6 +22,7 @@ One important thing to design a system is that developers are able to make proto
 Since the quality of product image / video and the speed of rendering contents are important for e-commerce business, the web contents such as HTML, CSS, JavaScript, image, and video will be loaded from Amazon CloudFront which is a famous CDN(Content Delivery Network) provided by Amazon where CDN enhances load time of content using edge network and cashing. Amazon CloudFront provides high availability and data durability for hosting and can be used to combat DDOS(Distributed Denial of Service) or distributed denial of service attacks by filtering malformed requests. We will use Amazon S3(Simple Storage Service) to store original contents of cloudFront since Amazon S3 has a comparative price policy to store and retrieve contents. 
 The microservices of catalog, order, and account should support RESTful APIs for clients. Also, since the target address of a monolithic service is usually a specific domain address like www.octank.com, a path routing is required as www.octank.com/get_item. Also, load balancing is required for microservices to distribute incoming traffic across EC2 instances. Thus, we will use Amazon ALB (Application Load Balancer) for path routing and load balancing based on Layer 7. Also Amazaon ALB ables to route traffic to health targets from registered at scale.
 
+<img width="436" alt="image" src="https://user-images.githubusercontent.com/52392004/154597580-d95b9d68-237f-4664-95ae-06418d83162a.png">
 Figure 1 the proposed architecture for e-commerce
 
 The account service uses a database to verify a user and manage user profiles about name, age, sex, and address. Amazon Aurora is a fully managed relational database and compatible with MySQL and PostgreSQL. Also, it supports database clustering and replication. So, Amazon Aurora will be used for the account database. 
@@ -30,6 +31,8 @@ In order to reduce the number of requests for DynamoDB, Amazon ElastiCache is in
 Notifications of buying, selling and shipping will be sent by Amazon SNS(Simple Notification Service) which is a fully managed messaging service for SMS, email, and mobile push notifications. Also, it can send millions of promotional messages with reliable and scalable manners automatically.
 Figure 2 shows an implantation of the proposed architecture based on AWS cloud infrastructure. We will use Amazon EKS(Elastic Kubernetes Service) as an orchestration tool. It provides highly available and secure clusters for microservices. VPC is configured with public and private subnets in order to manage private IPs and security. Also, NAT gateways allow outbound internet access for the microservices of catalog, order, and account from private subnet. For secured access from outside, ACL and SG should be set by the role. Also we use Amazon Route53 which is a highly available and scalable DNS(Domain Name System) web service and registers domain names..
 In order to ensure high availability, the server should be set up in Multi-AZ (2 or 3 different Availability Zones) so that the service continues to work even if one of the availability zones goes down. Also, we will apply different ASG(Auto Scaling Group) for catalog, order, and account since we want to optimize EC2 node groups effectively based on the purpose of the service. 
+
+<img width="466" alt="image" src="https://user-images.githubusercontent.com/52392004/154597633-51253b3d-c48e-4dea-8689-178b37d287c0.png">
 
 Figure 2 AWS implementation based on microservice architecture
 
@@ -45,16 +48,20 @@ Amazon ElasticSearch Service is a cost-effective managed service for log analyt
 Amazon Managed Service for Prometheus(AMP) is a prometheus compatible monitoring service.  Prometheus can collect and query metrics from AWS container services including Amazon EKS. Also, Amazon Grafana is a popular open source analytics platform that enables you to query, visualize, alert on and understand your metrics no matter where they are stored.
 Figure 3 shows the monitoring process for microservices where the operator can check the status of microservices using Kibana and Grafana.
 
+
+<img width="417" alt="image" src="https://user-images.githubusercontent.com/52392004/154597683-c61d4d59-59c0-48d3-b01d-b0da37d3c52e.png">
+
 Figure 3 Monitoring of microservices
  
 ### Migration Plan
 The network connection between on-premises and cloud can use AWS Direct Connect or VPN. Amazon DMS(Database Migration Service) can migrate on-premises to Amazon Aurora or Amazon DynamoDB with minimal downtime. Also, Amazon DMS supports heterogeneous migration between different database platforms. Also, the database of on-premises can be continuously replicated with high availability.
 Amazon SCT(Schema Conversion Tool) converts the existing database schema for the target database suitably. And it provides a project-based user interface to convert the database schema so that the user can easily convert it.
 After the database migration, the migration of processes should be Step-by-Step Walkthrough. So, weighted routing by Route53 is used to route traffic from on-premises to cloud. 
-Figure 3 shows the migration of databases from on-premises to cloud.
+Figure 4 shows the migration of databases from on-premises to cloud.
 
 
-Figure 3 Database migration
+<img width="434" alt="image" src="https://user-images.githubusercontent.com/52392004/154597719-25944e0d-3400-44a7-9361-c274b66a4594.png">
+Figure 4 Database migration
  
 ### Summary
 The proposed architecture is highly available and satisfies the requirements where we have applied EKS to manage the Pods dynamically so that Pods can be recovered for microservices.  The auto scaling groups in which each microservice uses their own group effectively optimizes the resource of microserves for variant traffic. 
