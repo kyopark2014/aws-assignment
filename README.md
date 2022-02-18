@@ -1,4 +1,5 @@
-# The e-commerce architecture for Octank based on microservice
+# AWS Assignment for Solutions Architect 
+
 It is an assignment as a part of aws application. I will share this in order to help someone who want to appliy Amazon Web Service as a solutions architect. 
 
 ## The e-commerce architecture for Octank based on microservice
